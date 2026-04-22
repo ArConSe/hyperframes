@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0D1B2A;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #0D1B2A;
+      }
+
+      /* ── SCENE 1: Name Reveal ── */
+      #scene1 { z-index: 1; }
+
+      .s1-glow {
+        position: absolute;
+        width: 900px;
+        height: 700px;
+        top: 50%;
+        left: 50%;
+        margin-left: -450px;
+        margin-top: -350px;
+        background: radial-gradient(ellipse at center, rgba(106,153,78,0.20) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      .s1-ghost {
+        position: absolute;
+        top: 250px;
+        left: 100px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 420px;
+        font-weight: 800;
+        color: rgba(106,153,78,0.04);
+        white-space: nowrap;
+        pointer-events: none;
+        letter-spacing: -0.05em;
+        line-height: 1;
+      }
+
+      .s1-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 160px;
+      }
+
+      #s1-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 180px;
+        font-weight: 800;
+        color: #F0EAD2;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+
+      #s1-line {
+        width: 180px;
+        height: 5px;
+        background: #6A994E;
+        margin: 28px 0 32px;
+      }
+
+      #s1-sub {
+        font-family: 'Roboto', sans-serif;
+        font-size: 24px;
+        font-weight: 300;
+        color: rgba(240,234,210,0.55);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      /* ── SCENE 2: Tagline ── */
+      #scene2 { z-index: 2; opacity: 0; }
+
+      .s2-glow {
+        position: absolute;
+        width: 800px;
+        height: 900px;
+        top: 50%;
+        left: 20%;
+        margin-left: -400px;
+        margin-top: -450px;
+        background: radial-gradient(ellipse at center, rgba(221,161,94,0.12) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      #s2-bar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 6px;
+        height: 1080px;
+        background: #6A994E;
+      }
+
+      .s2-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 100px 200px;
+      }
+
+      .s2-line {
+        font-family: 'Poppins', sans-serif;
+        font-size: 130px;
+        font-weight: 700;
+        color: #F0EAD2;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+
+      .s2-line .accent { color: #6A994E; }
+
+      #s2-tagline-sub {
+        font-family: 'Roboto', sans-serif;
+        font-size: 22px;
+        font-weight: 300;
+        color: rgba(240,234,210,0.40);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        margin-top: 36px;
+      }
+
+      /* ── SCENE 3: Closing ── */
+      #scene3 { z-index: 3; opacity: 0; }
+
+      .s3-glow {
+        position: absolute;
+        width: 1100px;
+        height: 600px;
+        top: 50%;
+        left: 50%;
+        margin-left: -550px;
+        margin-top: -300px;
+        background: radial-gradient(ellipse at center, rgba(106,153,78,0.14) 0%, transparent 65%);
+        pointer-events: none;
+      }
+
+      .s3-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        padding: 120px 300px;
+        text-align: center;
+      }
+
+      #s3-h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 88px;
+        font-weight: 700;
+        color: #F0EAD2;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      #s3-h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 88px;
+        font-weight: 300;
+        color: rgba(240,234,210,0.80);
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+      }
+
+      #s3-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #6A994E;
+        margin: 40px auto;
+      }
+
+      #s3-meta {
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        font-weight: 300;
+        color: rgba(240,234,210,0.40);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      #s3-lockup {
+        font-family: 'Poppins', sans-serif;
+        font-size: 32px;
+        font-weight: 600;
+        color: rgba(240,234,210,0.20);
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        margin-top: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="arconse-intro"
+      data-width="1920"
+      data-height="1080"
+      data-start="0"
+      data-duration="10"
+    >
+      <!-- Scene 1: Name Reveal -->
+      <div id="scene1" class="scene">
+        <div class="s1-glow"></div>
+        <div class="s1-ghost">BUILD</div>
+        <div class="s1-content">
+          <div id="s1-name">ArConSe</div>
+          <div id="s1-line"></div>
+          <div id="s1-sub">Architecture · Construction · Services</div>
+        </div>
+      </div>
+
+      <!-- Scene 2: Tagline -->
+      <div id="scene2" class="scene">
+        <div class="s2-glow"></div>
+        <div id="s2-bar"></div>
+        <div class="s2-content">
+          <div id="s2-l1" class="s2-line">We <span class="accent">Build.</span></div>
+          <div id="s2-l2" class="s2-line">We <span class="accent">Design.</span></div>
+          <div id="s2-l3" class="s2-line">We <span class="accent">Sell.</span></div>
+          <div id="s2-tagline-sub">Philippines · Sustainable Solutions</div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Closing -->
+      <div id="scene3" class="scene">
+        <div class="s3-glow"></div>
+        <div class="s3-content">
+          <div id="s3-h1">Innovative solutions</div>
+          <div id="s3-h2">for a sustainable future.</div>
+          <div id="s3-dot"></div>
+          <div id="s3-meta">Silang, Cavite · Philippines</div>
+          <div id="s3-lockup">ArConSe</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      var tl = gsap.timeline({ paused: true });
+
+      // ── SCENE 1 ──────────────────────────────────────────────
+      // Glow: fade in
+      tl.from(".s1-glow", { opacity: 0, scale: 0.6, duration: 1.5, ease: "power1.out" }, 0);
+
+      // Ghost text: drift in from right
+      tl.from(".s1-ghost", { opacity: 0, x: 80, duration: 2.5, ease: "power1.out" }, 0);
+
+      // Brand name: slide up
+      tl.from("#s1-name", { y: 70, opacity: 0, duration: 0.65, ease: "power3.out" }, 0.3);
+
+      // Green accent line: expand from left
+      tl.from("#s1-line", { scaleX: 0, transformOrigin: "left center", duration: 0.5, ease: "expo.out" }, 0.75);
+
+      // Subtitle: rise and fade in
+      tl.from("#s1-sub", { y: 20, opacity: 0, duration: 0.45, ease: "power2.out" }, 1.05);
+
+      // ── TRANSITION 1→2 (blur crossfade, medium energy) ───────
+      var T1 = 2.7;
+      tl.to("#scene1", { filter: "blur(12px)", scale: 1.03, opacity: 0, duration: 0.55, ease: "power2.inOut", overwrite: "auto" }, T1);
+      // fromTo is exempt from CSS transform conflict; overwrite: auto prevents stale opacity conflict
+      tl.fromTo("#scene2",
+        { filter: "blur(12px)", scale: 0.97 },
+        { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.55, ease: "power2.inOut", overwrite: "auto" },
+        T1 + 0.1
+      );
+
+      // ── SCENE 2 ──────────────────────────────────────────────
+      var S2 = T1 + 0.15;
+
+      // Amber glow: fade in
+      tl.from(".s2-glow", { opacity: 0, scale: 0.5, duration: 1.5, ease: "power1.out" }, S2);
+
+      // Green accent bar: scale down from top
+      tl.from("#s2-bar", { scaleY: 0, transformOrigin: "top center", duration: 0.55, ease: "expo.out" }, S2 + 0.1);
+
+      // Tagline lines: slide in from left, staggered
+      tl.from("#s2-l1", { x: -90, opacity: 0, duration: 0.6, ease: "power3.out" }, S2 + 0.2);
+      tl.from("#s2-l2", { x: -90, opacity: 0, duration: 0.6, ease: "power2.out" }, S2 + 0.45);
+      tl.from("#s2-l3", { x: -90, opacity: 0, duration: 0.6, ease: "expo.out" }, S2 + 0.7);
+
+      // Sub-label: rise and fade
+      tl.from("#s2-tagline-sub", { y: 14, opacity: 0, duration: 0.4, ease: "power1.out" }, S2 + 1.1);
+
+      // ── TRANSITION 2→3 (blur crossfade, medium energy) ───────
+      var T2 = 6.5;
+      tl.to("#scene2", { filter: "blur(12px)", scale: 1.03, opacity: 0, duration: 0.55, ease: "power2.inOut", overwrite: "auto" }, T2);
+      // fromTo is exempt from CSS transform conflict; opacity tweens from CSS 0 to 1
+      tl.fromTo("#scene3",
+        { filter: "blur(12px)", scale: 0.97 },
+        { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.55, ease: "power2.inOut" },
+        T2 + 0.1
+      );
+
+      // ── SCENE 3 ──────────────────────────────────────────────
+      var S3 = T2 + 0.15;
+
+      // Green glow: fade in
+      tl.from(".s3-glow", { opacity: 0, scale: 0.5, duration: 1.5, ease: "power1.out" }, S3);
+
+      // Headlines: slide up, staggered
+      tl.from("#s3-h1", { y: 55, opacity: 0, duration: 0.6, ease: "power3.out" }, S3 + 0.1);
+      tl.from("#s3-h2", { y: 45, opacity: 0, duration: 0.55, ease: "power2.out" }, S3 + 0.35);
+
+      // Green dot: scale pop
+      tl.from("#s3-dot", { scale: 0, opacity: 0, duration: 0.4, ease: "back.out(2.5)" }, S3 + 0.7);
+
+      // Meta and lockup: fade in
+      tl.from("#s3-meta", { y: 12, opacity: 0, duration: 0.4, ease: "power1.out" }, S3 + 0.9);
+      tl.from("#s3-lockup", { opacity: 0, duration: 0.5, ease: "power1.out" }, S3 + 1.15);
+
+      // Visibility kills — prevent partially-visible overlap when scrubbing
+      tl.set("#scene1", { visibility: "hidden" }, T1 + 0.55);
+      tl.set("#scene2", { visibility: "hidden" }, T2 + 0.55);
+
+      // ── FINAL EXIT ───────────────────────────────────────────
+      tl.to("#scene3", { opacity: 0, duration: 0.5, ease: "power2.in" }, 9.5);
+      tl.set("#scene3", { visibility: "hidden" }, 10.0);
+
+      window.__timelines["arconse-intro"] = tl;
+    </script>
+  </body>
+</html>
